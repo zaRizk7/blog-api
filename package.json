@@ -1,0 +1,46 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "description": "Simple blogging API with CI/CD, written in JavaScript with ES6 syntax.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "npm test && rm -rf dist && babel src -d dist -s",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaRizk7/blog-api.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "API"
+  ],
+  "author": "Lalu M. Riza Rizky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zaRizk7/blog-api/issues"
+  },
+  "homepage": "https://github.com/zaRizk7/blog-api#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/runtime": "^7.10.4",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "argon2": "^0.26.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.22"
+  }
+}
