@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "npm test && rm -rf dist && babel src --out-file dist/index.js -s",
+    "build": "npm test && rm -rf dist && babel src -d dist -s",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest"
   },
@@ -29,18 +29,19 @@
     "@babel/node": "^7.10.4",
     "@babel/plugin-transform-runtime": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "@babel/runtime": "^7.10.4",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.10.4",
     "argon2": "^0.26.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.22",
+    "morgan": "^1.10.0",
     "validator": "^13.1.1"
   }
 }
