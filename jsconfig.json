@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "#core/*": ["src/core/*"],
+      "#helper/*": ["src/helper/*"],
+      "#routes/*": ["src/routes/*"],
+      "#middleware/*": ["src/middleware/*"],
+      "#models/*": ["src/models/*"],
+      "#services/*": ["src/services/*"],
+      "#tests/*": ["tests/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

@@ -1,12 +1,13 @@
-import Model from './model';
+import { Schema } from 'mongoose';
 import validator from 'validator';
 import { hash, verify } from 'argon2';
+import Model from '#core/model';
 
 /**
  * User model class.
  * @extends Model
  */
-export default class UserModel extends Model {
+export default class User extends Model {
   /**
    * Constructs user model with the name and defined schema.
    * @constructor
@@ -39,6 +40,9 @@ export default class UserModel extends Model {
         type: Boolean,
         required: true,
       },
+      posts: [{ type: Schema.Types.ObjectId, ref: 'Posts' }],
+      comments: [{ type: Schema.Types.ObjectId, ref: 'Comments' }],
+      uploads: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }],
     });
   }
 
@@ -48,9 +52,8 @@ export default class UserModel extends Model {
    * @param {string} password plain text password that will be hashed
    */
   async hashPassword(password) {
-    if (password.length >= 8 && password.length <= 20) {
+    if (password.length >= 8 && password.length <= 20)
       return await hash(password);
-    }
     throw new Error('Password length is not between 8-20 characters!');
   }
 
@@ -66,22 +69,23 @@ export default class UserModel extends Model {
 
   /**
    * Method that creates new user data and stores to database collection.
-   * @async
    * @param {object} data
    */
-  async create(data) {
+  create(data) {
     data.password = this.hashPassword(data.password);
-    data.isAdmin = false;
     return super.create(data);
+  }
+
+  readByEmail(email) {
+    return this.db.findOne({ email });
   }
 
   /**
    * Method that creates new user data and stores to database collection.
-   * @async
    * @param {string} id
    * @param {object} data
    */
-  async update(id, data) {
+  update(id, data) {
     data.password = this.hashPassword(data.password);
     return super.update(id, data);
   }

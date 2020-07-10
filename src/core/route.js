@@ -5,5 +5,6 @@ export default Router()
    *
    */
   .get('/', (req, res) => {
-    res.status(200).send('Success!');
+    req.body = { message: 'Hello!' };
+    res.status(200).json(req.body);
   });
