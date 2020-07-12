@@ -1,10 +1,10 @@
 import UserModel from '#models/user';
-import TokenModel from '#models/token';
+import RefreshTokenModel from '#models/refresh-token';
 import tokenHelper from '#helper/token';
 
 export default class AuthService {
   static userModel = new UserModel();
-  static tokenModel = new TokenModel();
+  static refreshTokenModel = new RefreshTokenModel();
 
   static async login({ email, password }) {
     try {
@@ -15,8 +15,10 @@ export default class AuthService {
       );
       if (passwordValid) {
         const token = tokenHelper.generateInitialToken({ _id: user._id });
-        const refreshToken = await this.tokenModel.create({ token });
-        return { message: 'Login successful!', user, refreshToken };
+        const refreshToken = await this.refreshTokenModel.create({
+          token: token.refreshToken,
+        });
+        return { message: 'Login successful!', user, token };
       }
       throw new Error('Username or password is incorrect!');
     } catch (error) {
@@ -26,7 +28,7 @@ export default class AuthService {
 
   static async logout({ refreshTokenId }) {
     try {
-      const expiredToken = await this.tokenModel.update(refreshTokenId, {
+      const expiredToken = await this.refreshTokenModel.update(refreshTokenId, {
         isValid: false,
       });
       return { message: 'Logout successful!', expiredToken };
@@ -40,7 +42,7 @@ export default class AuthService {
       data.isAdmin = false;
       const newUser = await this.userModel.create(data);
       const accessToken = tokenHelper.generateAccessToken({ _id: newUser._id });
-      const refreshToken = await this.tokenModel.create({
+      const refreshToken = await this.refreshTokenModel.create({
         token: tokenHelper.generateRefreshToken({ _id: newUser._id }),
       });
       const token = { accessToken, refreshToken };
@@ -56,7 +58,9 @@ export default class AuthService {
 
   static async refresh({ refreshTokenId }) {
     try {
-      const { token, isValid } = await this.tokenModel.readById(refreshTokenId);
+      const { token, isValid } = await this.refreshTokenModel.readById(
+        refreshTokenId
+      );
       if (isValid) {
         const { _id } = tokenHelper.verifyRefreshToken(token);
         return {

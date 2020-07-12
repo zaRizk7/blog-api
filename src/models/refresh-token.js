@@ -1,17 +1,16 @@
 import Model from '#core/model';
-import { Schema } from 'mongoose';
 
 /**
  * ExpiredToken model class.
  * @extends Model
  */
-export default class Token extends Model {
+export default class RefreshToken extends Model {
   /**
-   * Constructs comment model with the name and defined schema.
+   * Constructs refresh token model with the name and defined schema.
    * @constructor
    */
   constructor() {
-    super('Comments', {
+    super('RefreshTokens', {
       token: {
         type: String,
         unique: true,

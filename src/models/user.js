@@ -1,7 +1,7 @@
+import Model from '#core/model';
 import { Schema } from 'mongoose';
 import validator from 'validator';
 import { hash, verify } from 'argon2';
-import Model from '#core/model';
 
 /**
  * User model class.
@@ -48,23 +48,20 @@ export default class User extends Model {
 
   /**
    * Method that hashes plain text password, and checks if the password length is 8-20 characters.
-   * @async
    * @param {string} password plain text password that will be hashed
    */
   async hashPassword(password) {
-    if (password.length >= 8 && password.length <= 20)
-      return await hash(password);
+    if (password.length >= 8 && password.length <= 20) return hash(password);
     throw new Error('Password length is not between 8-20 characters!');
   }
 
   /**
    * Method that returns boolean of hash and plain text comparison.
-   * @async
    * @param {string} password plain text password that will be hashed
    * @param {string} hash hash that will be compared
    */
   async comparePassword(password, hash) {
-    return await verify(hash, password);
+    return verify(hash, password);
   }
 
   /**

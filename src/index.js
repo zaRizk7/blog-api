@@ -1,7 +1,7 @@
-import http from 'http';
 import app from '#core/app';
 import dbConnection from '#core/database';
 import { port, environment } from '#core/config';
+import http from 'http';
 
 dbConnection
   .then(() => {
