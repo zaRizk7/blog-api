@@ -1,7 +1,7 @@
-import Model from '#core/model';
 import { Schema } from 'mongoose';
-import validator from 'validator';
 import { hash, verify } from 'argon2';
+import validator from 'validator';
+import Model from '#core/model';
 
 /**
  * User model class.
@@ -38,6 +38,7 @@ export default class User extends Model {
       },
       isAdmin: {
         type: Boolean,
+        default: false,
         required: true,
       },
       posts: [{ type: Schema.Types.ObjectId, ref: 'Posts' }],
@@ -51,8 +52,8 @@ export default class User extends Model {
    * @param {string} password plain text password that will be hashed
    */
   async hashPassword(password) {
-    if (password.length >= 8 && password.length <= 20) return hash(password);
-    throw new Error('Password length is not between 8-20 characters!');
+    if (password.length >= 8 && password.length <= 20) return hash(password); // Returns the password hash if the password is valid
+    throw new Error('Password length is not between 8-20 characters!'); // Returns error if the password is not valid
   }
 
   /**
@@ -61,29 +62,31 @@ export default class User extends Model {
    * @param {string} hash hash that will be compared
    */
   async comparePassword(password, hash) {
-    return verify(hash, password);
+    return verify(hash, password); // Returns true if the password is correct
   }
 
   /**
    * Method that creates new user data and stores to database collection.
+   * @async
    * @param {object} data
    */
-  create(data) {
-    data.password = this.hashPassword(data.password);
-    return super.create(data);
+  async create(data) {
+    data.password = await this.hashPassword(data.password); // Hash the password if valid
+    return super.create(data); // Create and store the data into database
   }
 
   readByEmail(email) {
-    return this.db.findOne({ email });
+    return this.db.findOne({ email }); // Find user based on unique email address
   }
 
   /**
    * Method that creates new user data and stores to database collection.
+   * @async
    * @param {string} id
    * @param {object} data
    */
-  update(id, data) {
-    data.password = this.hashPassword(data.password);
-    return super.update(id, data);
+  async update(id, data) {
+    if (data.password) data.password = await this.hashPassword(data.password); // Returns the password hash if the password is valid
+    return super.update(id, data); // Updates the data changes into database
   }
 }

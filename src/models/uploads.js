@@ -1,5 +1,5 @@
-import Model from '#core/model';
 import { Schema } from 'mongoose';
+import Model from '#core/model';
 
 /**
  * Upload model class.
@@ -7,7 +7,7 @@ import { Schema } from 'mongoose';
  */
 export default class Upload extends Model {
   /**
-   * Constructs comment model with the name and defined schema.
+   * Constructs upload model with the name and defined schema.
    * @constructor
    */
   constructor() {

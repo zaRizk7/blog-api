@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
+    "clean": "rm -rf dist",
     "build": "npm test && rm -rf dist && babel src -d dist -s",
     "dev": "nodemon --exec babel-node src/index.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose --runInBand"
   },
   "repository": {
     "type": "git",

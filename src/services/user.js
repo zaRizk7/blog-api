@@ -1,35 +1,22 @@
 import UserModel from '#models/user';
-import RefreshTokenModel from '#models/refresh-token';
+import SessionModel from '#models/session';
+
+const userModel = new UserModel();
+const sessionModel = new SessionModel();
 
 /**
- * User service class to generate response
+ * User service class to handling user data.
  */
 export default class UserService {
-  static userModel = new UserModel();
-  static refreshTokenModel = new RefreshTokenModel();
-
   static async updateUser(userId, data) {
-    try {
-      const updatedUser = await this.userModel.update(userId, data); // Calls update from user model
-      return { message: 'User updated successfully', updatedUser }; // Returns updated user data with message
-    } catch (err) {
-      console.log(err);
-    }
+    const updatedUser = await userModel.update(userId, data); // Calls update from user model
+    return { updatedUser }; // Returns message and updated user data
   }
 
   static async deleteUser(userId, refreshTokenId) {
-    try {
-      const deletedUser = await this.userModel.delete(userId); // Calls delete from user model
-      const expiredToken = await this.tokenModel.update(refreshTokenId, {
-        isValid: false,
-      }); // Calls update from token model to invalidate token
-      return {
-        message: 'User deleted successfully',
-        expiredToken,
-        deletedUser,
-      }; // Returns deleted user and expired token information with message
-    } catch (err) {
-      console.error(err);
-    }
+    const deletedUser = await userModel.delete(userId); // Calls delete from user model
+    const data = { inValid: false }; // This object is used to invalidate existing session
+    const expiredToken = await sessionModel.update(refreshTokenId, data); // Calls update from token model to invalidate token
+    return { deletedUser, expiredToken }; // Returns deleted user, and expired token information response
   }
 }

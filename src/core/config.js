@@ -1,16 +1,34 @@
 import 'dotenv/config';
 
-export const environment = process.env.NODE_ENV;
-export const port = process.env.PORT;
-export const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-export const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
-export const tokenExpiration = process.env.TOKEN_EXPIRATION;
-export const databaseURI = process.env.DB_URI;
+const {
+  NODE_ENV,
+  PORT,
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  TOKEN_EXPIRATION,
+  DB_URI,
+  DB_NAME,
+} = process.env; // Imports all required variables from .env
+
+/** Current environment for the application. either test, production, or development (default) */
+export const environment = NODE_ENV || 'development';
+/** Port that the server listens to. */
+export const port = PORT || 3000;
+/** Secret key for validating access token JWT. */
+export const accessTokenSecret = ACCESS_TOKEN_SECRET || 'accessSecret';
+/** Secret key for validating refresh token JWT. */
+export const refreshTokenSecret = REFRESH_TOKEN_SECRET || 'refreshSecret';
+/** Duration of valid access token.  */
+export const tokenExpiration = TOKEN_EXPIRATION || '5s';
+/** MongoDB database URI for database connection. */
+export const databaseURI = DB_URI || 'mongodb://localhost:27017';
+/** Mongoose configuration. */
 export const databaseConfig = {
-  useFindAndModify: true,
+  dbName: DB_NAME || 'blog',
+  useCreateIndex: true,
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: process.env.DB_NAME,
 };
 
 export default {

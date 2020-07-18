@@ -10,7 +10,7 @@ export default class Model {
    * @param {import('mongoose').SchemaDefinition} definition Schema definition
    */
   constructor(modelName, definition) {
-    this.db = model(modelName, new Schema(definition, { timestamps: true }));
+    this.db = model(modelName, new Schema(definition, { timestamps: true })); // Initialize model with the name and defined schema
   }
 
   /**
@@ -18,7 +18,7 @@ export default class Model {
    * @param {object} data The data based on defined schema.
    */
   create(data) {
-    return this.db.create(data);
+    return this.db.create(data); // Calls a promise that returns created data
   }
 
   /**
@@ -27,9 +27,9 @@ export default class Model {
    * @param {string} query.keyword Keyword that is used for data lookup
    */
   read({ keyword }) {
-    const searchParams = {};
-    if (keyword) searchParams.$text = { $search: keyword };
-    return this.db.find(searchParams);
+    const searchParams = {}; // Search parameter object for doing query, can be multiple but implements only keyword for now
+    if (keyword) searchParams.$text = { $search: keyword }; // Adds full text search query if there is keyword implemented
+    return this.db.find(searchParams); // Returns all data if there is no keyword
   }
 
   /**
@@ -37,7 +37,7 @@ export default class Model {
    * @param {string} id the document id for data lookup.
    */
   readById(id) {
-    return this.db.findById(id);
+    return this.db.findById(id); // Returns one data based on the ObjectId of the data
   }
 
   /**
@@ -46,7 +46,7 @@ export default class Model {
    * @param {object} data the data based on defined schema.
    */
   update(id, data) {
-    return this.db.findByIdAndUpdate(id, data);
+    return this.db.findByIdAndUpdate(id, data, { new: true }); // Finds the data based on its ObjectId and updates the data
   }
 
   /**
@@ -54,6 +54,6 @@ export default class Model {
    * @param {string} id the document id for data lookup.
    */
   delete(id) {
-    return this.db.findByIdAndDelete(id);
+    return this.db.findByIdAndDelete(id); // Finds the data based on its ObjectId and deletes the data
   }
 }

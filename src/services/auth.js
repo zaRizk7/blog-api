@@ -1,76 +1,76 @@
 import UserModel from '#models/user';
-import RefreshTokenModel from '#models/refresh-token';
+import SessionModel from '#models/session';
 import tokenHelper from '#helper/token';
 
+const userModel = new UserModel();
+const sessionModel = new SessionModel();
+
+/**
+ * Auth service class used to handling authentication.
+ */
 export default class AuthService {
-  static userModel = new UserModel();
-  static refreshTokenModel = new RefreshTokenModel();
-
+  /**
+   * Method used to generate user information and auth tokens response when logging in
+   * @param {object} loginCredentials
+   * @param {string} loginCredentials.email
+   * @param {string} loginCredentials.password
+   */
   static async login({ email, password }) {
-    try {
-      const user = await this.userModel.readByEmail(email);
-      const passwordValid = await this.userModel.comparePassword(
-        password,
-        user.password
-      );
-      if (passwordValid) {
-        const token = tokenHelper.generateInitialToken({ _id: user._id });
-        const refreshToken = await this.refreshTokenModel.create({
-          token: token.refreshToken,
-        });
-        return { message: 'Login successful!', user, token };
-      }
-      throw new Error('Username or password is incorrect!');
-    } catch (error) {
-      console.log(err);
-    }
+    const user = await this.userModel.readByEmail(email); // Fetch the user data based on existing email
+    const passwordValid = await this.userModel.comparePassword(
+      password,
+      user.password
+    ); // Compares password in argument and hash from database
+    if (passwordValid) {
+      const newSession = await sessionModel.create({ user }); // Creates new session in the database
+      const accessPayload = { userId: user._id }; // Payload for the access token
+      const accessToken = tokenHelper.generateAccessToken(accessPayload); // Generate new access token with the defined payload
+      const refreshPayload = { sessionId: newSession._id }; // Payload for the refresh token
+      const refreshToken = tokenHelper.generateRefreshToken(refreshPayload); // Generate new refresh token with the defined payload
+      return { user, accessToken, refreshToken }; // Returns user informmation and auth tokens
+    } // Checks if the password is correct and returns user info and tokens
+    throw new Error('Username or password is incorrect!'); // Throws an error if username or password is not correct
   }
 
-  static async logout({ refreshTokenId }) {
-    try {
-      const expiredToken = await this.refreshTokenModel.update(refreshTokenId, {
-        isValid: false,
-      });
-      return { message: 'Logout successful!', expiredToken };
-    } catch (err) {
-      console.log(err);
-    }
+  /**
+   * Method used to generate user information and auth tokens response when logging in
+   * @param {object} authCredentials
+   * @param {string} authCredentials.refreshToken
+   */
+  static async logout({ refreshToken }) {
+    const { sessionId } = await tokenHelper.verifyRefreshToken(refreshToken); // Destructures token payload of session ID
+    const data = { inValid: false }; // This object is used to invalidate existing session
+    const expiredSession = await sessionModel.update(sessionId, data); // Invalidates token so that it cannot be used again
+    return { expiredSession }; // Returns message and invalidated token
   }
 
+  /**
+   * Method used to create user account and auth tokens response when user is signing up
+   * @param {object} data
+   */
   static async signup(data) {
-    try {
-      data.isAdmin = false;
-      const newUser = await this.userModel.create(data);
-      const accessToken = tokenHelper.generateAccessToken({ _id: newUser._id });
-      const refreshToken = await this.refreshTokenModel.create({
-        token: tokenHelper.generateRefreshToken({ _id: newUser._id }),
-      });
-      const token = { accessToken, refreshToken };
-      return {
-        message: 'Signup successful!',
-        newUser,
-        token,
-      };
-    } catch (error) {
-      console.log(err);
-    }
+    const newUser = await userModel.create(data); // Creates and stores the new user data into collection
+    const newSession = await sessionModel.create(newUser); // Creates and stores the new user session
+    const accessPayload = { userId: newUser._id }; // Payload that will be stored within the access token
+    const accessToken = tokenHelper.generateAccessToken(accessPayload); // Generate access token with the defined payload
+    const refreshPayload = { sessionId: newSession._id }; // Payload that will be stored within the refresh token
+    const refreshToken = tokenHelper.generateRefreshToken(refreshPayload); // Generate refresh token with the defined payload
+    return { newUser, accessToken, refreshToken }; // Returns new user information and auth tokens
   }
 
-  static async refresh({ refreshTokenId }) {
-    try {
-      const { token, isValid } = await this.refreshTokenModel.readById(
-        refreshTokenId
-      );
-      if (isValid) {
-        const { _id } = tokenHelper.verifyRefreshToken(token);
-        return {
-          message: 'Refreshing token successful!',
-          accessToken: tokenHelper.generateAccessToken({ _id }),
-        };
-      }
-      throw new Error('Token is invalid!');
-    } catch (err) {
-      console.log(err);
-    }
+  /**
+   * Method used to refresh access token for authenticated api access
+   * @param {object} data
+   * @param {string} data.refreshToken
+   */
+  static async refresh({ refreshToken }) {
+    const { sessionId } = tokenHelper.verifyRefreshToken(refreshToken); // Destructures refresh token payload of session ID
+    const { isValid } = await sessionModel.readById(sessionId); // Destructures data fetched from database of valid session
+    if (isValid) {
+      const accessPayload = { userId: user }; // Generate new payload for the access token
+      const accessToken = tokenHelper.generateAccessToken(accessPayload); // Generate new access token with the defined payload
+      return { accessToken }; // Returns the new access token
+    } // Checks if the session is valid
+    throw new Error('Token is invalid!'); // Throws an error if the token is invalid
   }
 }

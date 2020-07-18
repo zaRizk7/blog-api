@@ -2,9 +2,9 @@ import { Router } from 'express';
 
 export default Router()
   /**
-   *
+   * @routes /api/v1/test
    */
-  .get('/', (req, res) => {
+  .get('/test', (req, res, next) => {
     req.body = { message: 'Hello!' };
-    res.status(200).json(req.body);
+    return res.status(200).json(req.body);
   });

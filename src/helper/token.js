@@ -1,9 +1,9 @@
+import { sign, verify } from 'jsonwebtoken';
 import {
   accessTokenSecret,
   refreshTokenSecret,
   tokenExpiration,
 } from '#core/config';
-import { sign, verify } from 'jsonwebtoken';
 
 /**
  * Used to generate access token with defined secret and expiration time.
@@ -46,22 +46,10 @@ export function verifyRefreshToken(token) {
   return verify(token, refreshTokenSecret);
 }
 
-/**
- * Used to generate token upon signup or login.
- * @param {string | object} payload
- */
-export function generateInitialToken(payload) {
-  return {
-    refreshToken: generateRefreshToken(payload),
-    accessToken: generateAccessToken(payload),
-  };
-}
-
 export default {
   generateAccessToken,
   getAccessToken,
   verifyAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-  generateInitialToken,
 };

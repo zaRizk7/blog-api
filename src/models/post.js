@@ -1,5 +1,5 @@
-import Model from '#core/model';
 import { Schema } from 'mongoose';
+import Model from '#core/model';
 
 /**
  * Post model class.
