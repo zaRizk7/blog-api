@@ -4,7 +4,7 @@ import CommentModel from '#models/comment';
 import UserModel from '#models/user';
 import PostModel from '#models/post';
 
-describe('Testing post model CRUD', () => {
+describe('Testing comment model CRUD', () => {
   const userModel = new UserModel(),
     postModel = new PostModel(),
     commentModel = new CommentModel(),

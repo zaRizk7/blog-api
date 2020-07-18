@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import validator from 'validator';
 import Model from '#core/model';
 
 /**
@@ -30,6 +31,7 @@ export default class Upload extends Model {
       },
       url: {
         type: String,
+        validate: validator.isURL,
         required: true,
       },
       uploader: {
