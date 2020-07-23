@@ -1,25 +1,22 @@
-import UserModel from '#models/user';
-import SessionModel from '#models/session';
+import userModel from '#models/user';
+import sessionModel from '#models/session';
 import tokenHelper from '#helper/token';
-
-const userModel = new UserModel();
-const sessionModel = new SessionModel();
 
 /**
  * Auth service class used to handling authentication.
  */
-export default class AuthService {
+class AuthService {
   /**
    * Method used to generate user information and auth tokens response when logging in
    * @param {object} loginCredentials
    * @param {string} loginCredentials.email
    * @param {string} loginCredentials.password
    */
-  static async login({ email, password }) {
+  async login({ email, password }) {
     // Fetch the user data based on existing email
-    const user = await this.userModel.readByEmail(email);
+    const user = await userModel.readByEmail(email);
     // Compares password in argument and hash from database
-    const passwordValid = await this.userModel.comparePassword(
+    const passwordValid = await userModel.comparePassword(
       password,
       user.password
     );
@@ -47,11 +44,11 @@ export default class AuthService {
    * @param {object} authCredentials
    * @param {string} authCredentials.refreshToken
    */
-  static async logout({ refreshToken }) {
+  async logout({ refreshToken }) {
     // Destructures token payload of session ID
     const { sessionId } = await tokenHelper.verifyRefreshToken(refreshToken);
     // This object is used to invalidate existing session
-    const data = { inValid: false };
+    const data = { isValid: false };
     // Invalidates token so that it cannot be used again
     const expiredSession = await sessionModel.update(sessionId, data);
     // Returns message and invalidated token
@@ -62,11 +59,11 @@ export default class AuthService {
    * Method used to create user account and auth tokens response when user is signing up
    * @param {object} data
    */
-  static async signup(data) {
+  async signup(data) {
     // Creates and stores the new user data into collection
     const newUser = await userModel.create(data);
     // Creates and stores the new user session
-    const newSession = await sessionModel.create(newUser);
+    const newSession = await sessionModel.create({ user: newUser });
     // Payload that will be stored within the access token
     const accessPayload = { userId: newUser._id };
     // Generate access token with the defined payload
@@ -84,11 +81,11 @@ export default class AuthService {
    * @param {object} body
    * @param {string} body.refreshToken
    */
-  static async refresh({ refreshToken }) {
+  async refresh({ refreshToken }) {
     // Destructures refresh token payload of session ID
     const { sessionId } = tokenHelper.verifyRefreshToken(refreshToken);
     // Destructures data fetched from database of valid session
-    const { isValid } = await sessionModel.readById(sessionId);
+    const { isValid, user } = await sessionModel.readById(sessionId);
     // Checks if the session is valid
     if (isValid) {
       // Generate new payload for the access token
@@ -102,3 +99,5 @@ export default class AuthService {
     throw new Error('Token is invalid!');
   }
 }
+
+export default new AuthService();

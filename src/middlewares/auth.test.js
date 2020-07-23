@@ -45,4 +45,16 @@ describe('Testing authentication middleware', () => {
       expect(err).not.toBeNull();
     });
   });
+
+  it('Tests all of the auth middleware together', async () => {
+    authMiddleware.fetchAccessTokenFromHeader(mockRequest, {}, () => {
+      expect(mockRequest.token).not.toBeNull();
+      authMiddleware.fetchUserData(mockRequest, {}, () => {
+        expect(mockRequest.user).not.toBeNull();
+        authMiddleware.isAdmin(mockRequest, {}, (err) => {
+          expect(err).not.toBeNull();
+        });
+      });
+    });
+  });
 });
