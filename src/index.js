@@ -16,6 +16,7 @@ import { databaseURI, databaseOptions } from '#config/database';
       console.log(`Listening to port ${port}.`);
     });
   } catch (error) {
-    console.error(error); // Console logs any occuring error
+    // Console logs any occuring error
+    console.error(error);
   }
 })();
