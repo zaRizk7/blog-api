@@ -1,7 +1,5 @@
 import tokenHelper from '#helper/token';
-import UserModel from '#models/user';
-
-const userModel = new UserModel();
+import userModel from '#models/user';
 
 /**
  * Middleware for fetching access token from request header.
@@ -46,4 +44,10 @@ function isAdmin(req, res, next) {
 const userAuthMiddleware = [fetchAccessTokenFromHeader, fetchUserData];
 const adminAuthMiddleware = [...userAuthMiddleware, isAdmin];
 
-export { userAuthMiddleware as default, adminAuthMiddleware };
+export {
+  userAuthMiddleware as default,
+  adminAuthMiddleware,
+  fetchAccessTokenFromHeader,
+  fetchUserData,
+  isAdmin,
+};

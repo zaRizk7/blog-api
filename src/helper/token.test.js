@@ -27,8 +27,8 @@ describe('Testing token handling', () => {
     setTimeout(() => {
       const expiredPayload = tokenHelper.verifyAccessToken(token);
       expect(expiredPayload).toBeNull();
-    }, 3000);
-  }, 4000);
+    }, 5000);
+  }, 6000);
 
   it('Creates new refresh token', () => {
     token = tokenHelper.generateRefreshToken(payload);

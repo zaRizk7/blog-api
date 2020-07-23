@@ -1,12 +1,10 @@
 import { connect, disconnect } from 'mongoose';
 import { databaseURI, databaseOptions } from '#config/database';
-import UserModel from '#models/user';
-import SessionModel from '#models/session';
+import userModel from '#models/user';
+import sessionModel from '#models/session';
 
 describe('Testing session model CRUD', () => {
-  const userModel = new UserModel(),
-    sessionModel = new SessionModel(),
-    userData = {
+  const userData = {
       email: 'test@gmail.com',
       password: 'testing123',
       name: 'testuser',

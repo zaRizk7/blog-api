@@ -6,7 +6,7 @@ import Model from '#core/model';
  * Upload model class.
  * @extends Model
  */
-export default class Upload extends Model {
+class Upload extends Model {
   /**
    * Constructs upload model with the name and defined schema.
    * @constructor
@@ -42,3 +42,5 @@ export default class Upload extends Model {
     });
   }
 }
+
+export default new Upload();

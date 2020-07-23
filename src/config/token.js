@@ -13,7 +13,7 @@ const accessTokenSecret = ACCESS_TOKEN_SECRET || 'accessSecret';
 const refreshTokenSecret = REFRESH_TOKEN_SECRET || 'refreshSecret';
 
 /** Duration of valid access token.  */
-const tokenExpiration = TOKEN_EXPIRATION || '2s';
+const tokenExpiration = TOKEN_EXPIRATION || '5s';
 
 /** All JWT token configurations. */
 const tokenConfig = {

@@ -5,7 +5,7 @@ import Model from '#core/model';
  * Comment model class.
  * @extends Model
  */
-export default class Comment extends Model {
+class Comment extends Model {
   /**
    * Constructs comment model with the name and defined schema.
    * @constructor
@@ -29,3 +29,5 @@ export default class Comment extends Model {
     });
   }
 }
+
+export default new Comment();

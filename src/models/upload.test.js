@@ -1,12 +1,10 @@
 import { connect, disconnect } from 'mongoose';
 import { databaseURI, databaseOptions } from '#config/database';
-import UserModel from '#models/user';
-import UploadModel from '#models/upload';
+import userModel from '#models/user';
+import uploadModel from '#models/upload';
 
 describe('Testing upload model CRUD', () => {
-  const userModel = new UserModel(),
-    uploadModel = new UploadModel(),
-    userData = {
+  const userData = {
       email: 'test@gmail.com',
       password: 'testing123',
       name: 'testuser',

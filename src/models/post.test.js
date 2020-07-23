@@ -1,12 +1,10 @@
 import { connect, disconnect } from 'mongoose';
 import { databaseURI, databaseOptions } from '#config/database';
-import UserModel from '#models/user';
-import PostModel from '#models/post';
+import userModel from '#models/user';
+import postModel from '#models/post';
 
 describe('Testing post model CRUD', () => {
-  const userModel = new UserModel(),
-    postModel = new PostModel(),
-    userData = {
+  const userData = {
       email: 'testpost@gmail.com',
       password: 'testing123',
       name: 'testuser',

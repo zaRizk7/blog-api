@@ -7,7 +7,7 @@ import Model from '#core/model';
  * User model class.
  * @extends Model
  */
-export default class User extends Model {
+class User extends Model {
   /**
    * Constructs user model with the name and defined schema.
    * @constructor
@@ -98,3 +98,5 @@ export default class User extends Model {
     return super.update(id, data);
   }
 }
+
+export default new User();

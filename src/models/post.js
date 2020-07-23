@@ -5,7 +5,7 @@ import Model from '#core/model';
  * Post model class.
  * @extends Model
  */
-export default class Post extends Model {
+class Post extends Model {
   /**
    * Constructs post model with the name and defined schema.
    * @constructor
@@ -33,3 +33,5 @@ export default class Post extends Model {
     });
   }
 }
+
+export default new Post();

@@ -10,7 +10,8 @@ export default class Model {
    * @param {import('mongoose').SchemaDefinition} definition Schema definition
    */
   constructor(modelName, definition) {
-    this.db = model(modelName, new Schema(definition, { timestamps: true })); // Initialize model with the name and defined schema
+    // Initialize model with the name and defined schema
+    this.db = model(modelName, new Schema(definition, { timestamps: true }));
   }
 
   /**
@@ -61,6 +62,6 @@ export default class Model {
    */
   delete(id) {
     // Finds the data based on its ObjectId and deletes the data
-    return this.db.findByIdAndDelete(id); 
+    return this.db.findByIdAndDelete(id);
   }
 }

@@ -1,16 +1,15 @@
 import { connect, disconnect } from 'mongoose';
 import { databaseURI, databaseOptions } from '#config/database';
-import UserModel from '#models/user';
+import userModel from '#models/user';
 
 describe('Testing user model CRUD', () => {
-  const userModel = new UserModel(),
-    userData = {
-      email: 'test@gmail.com',
-      password: 'testing123',
-      name: 'testuser',
-      placeOfBirth: 'Jakarta',
-      dateOfBirth: '2000-01-01',
-    };
+  const userData = {
+    email: 'test@gmail.com',
+    password: 'testing123',
+    name: 'testuser',
+    placeOfBirth: 'Jakarta',
+    dateOfBirth: '2000-01-01',
+  };
   let user;
 
   beforeAll(async () => {

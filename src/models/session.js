@@ -5,7 +5,7 @@ import Model from '#core/model';
  * ExpiredToken model class.
  * @extends Model
  */
-export default class Session extends Model {
+class Session extends Model {
   /**
    * Constructs session model with the name and defined schema.
    * @constructor
@@ -25,3 +25,5 @@ export default class Session extends Model {
     });
   }
 }
+
+export default new Session();
