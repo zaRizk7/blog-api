@@ -1,5 +1,5 @@
-import { connect, connection, disconnect } from 'mongoose';
-import { databaseURI, databaseConfig } from '#core/config';
+import { connect, disconnect } from 'mongoose';
+import { databaseURI, databaseOptions } from '#config/database';
 import UserModel from '#models/user';
 import PostModel from '#models/post';
 
@@ -21,7 +21,7 @@ describe('Testing post model CRUD', () => {
   let user, post;
 
   beforeAll(async () => {
-    await connect(databaseURI, databaseConfig);
+    await connect(databaseURI, databaseOptions);
     await userModel.db.deleteMany();
     await postModel.db.deleteMany();
     user = await userModel.create(userData);

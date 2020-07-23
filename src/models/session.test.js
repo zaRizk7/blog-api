@@ -1,5 +1,5 @@
-import { connect, connection, disconnect } from 'mongoose';
-import { databaseURI, databaseConfig } from '#core/config';
+import { connect, disconnect } from 'mongoose';
+import { databaseURI, databaseOptions } from '#config/database';
 import UserModel from '#models/user';
 import SessionModel from '#models/session';
 
@@ -17,7 +17,7 @@ describe('Testing session model CRUD', () => {
   let user, session;
 
   beforeAll(async () => {
-    await connect(databaseURI, databaseConfig);
+    await connect(databaseURI, databaseOptions);
     await userModel.db.deleteMany();
     await sessionModel.db.deleteMany();
     user = await userModel.create(userData);

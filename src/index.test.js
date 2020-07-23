@@ -1,13 +1,13 @@
 import { connect, disconnect } from 'mongoose';
 import supertest from 'supertest';
 import app from '#core/app';
-import { databaseURI, databaseConfig } from '#core/config';
+import { databaseURI, databaseOptions } from '#config/database';
 
 describe('Testing entire backend', () => {
   const requestListener = supertest(app);
 
   beforeAll(async () => {
-    await connect(databaseURI, databaseConfig);
+    await connect(databaseURI, databaseOptions);
   });
 
   afterAll(async () => {

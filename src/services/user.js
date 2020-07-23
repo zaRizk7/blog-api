@@ -9,14 +9,20 @@ const sessionModel = new SessionModel();
  */
 export default class UserService {
   static async updateUser(userId, data) {
-    const updatedUser = await userModel.update(userId, data); // Calls update from user model
-    return { updatedUser }; // Returns message and updated user data
+    // Calls update from user model
+    const updatedUser = await userModel.update(userId, data);
+    // Returns message and updated user data
+    return { updatedUser };
   }
 
   static async deleteUser(userId, refreshTokenId) {
-    const deletedUser = await userModel.delete(userId); // Calls delete from user model
-    const data = { inValid: false }; // This object is used to invalidate existing session
-    const expiredToken = await sessionModel.update(refreshTokenId, data); // Calls update from token model to invalidate token
-    return { deletedUser, expiredToken }; // Returns deleted user, and expired token information response
+    // Calls delete from user model
+    const deletedUser = await userModel.delete(userId);
+    // This object is used to invalidate existing session
+    const data = { inValid: false };
+    // Calls update from token model to invalidate token
+    const expiredToken = await sessionModel.update(refreshTokenId, data);
+    // Returns deleted user, and expired token information response
+    return { deletedUser, expiredToken };
   }
 }

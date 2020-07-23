@@ -1,5 +1,5 @@
-import { connect, connection, disconnect } from 'mongoose';
-import { databaseURI, databaseConfig } from '#core/config';
+import { connect, disconnect } from 'mongoose';
+import { databaseURI, databaseOptions } from '#config/database';
 import UserModel from '#models/user';
 import UploadModel from '#models/upload';
 
@@ -23,7 +23,7 @@ describe('Testing upload model CRUD', () => {
   let user, upload;
 
   beforeAll(async () => {
-    await connect(databaseURI, databaseConfig);
+    await connect(databaseURI, databaseOptions);
     await userModel.db.deleteMany();
     await uploadModel.db.deleteMany();
     user = await userModel.create(userData);

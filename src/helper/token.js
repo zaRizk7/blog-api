@@ -1,16 +1,15 @@
 import { sign, verify } from 'jsonwebtoken';
-import {
-  accessTokenSecret,
-  refreshTokenSecret,
-  tokenExpiration,
-} from '#core/config';
+import tokenConfig from '#config/token';
 
 /**
  * Used to generate access token with defined secret and expiration time.
  * @param {string | object} payload
  */
 export function generateAccessToken(payload) {
-  return sign(payload, accessTokenSecret, { expiresIn: tokenExpiration });
+  // Generate access token with defined secret key and expiration time
+  return sign(payload, tokenConfig.accessTokenSecret, {
+    expiresIn: tokenConfig.tokenExpiration,
+  });
 }
 
 /**
@@ -19,6 +18,7 @@ export function generateAccessToken(payload) {
  * @param {string} requestHeader.authorization
  */
 export function getAccessToken({ authorization }) {
+  // Separate 'Bearer ${TOKEN}' string to return the only the token
   return authorization.split(' ')[1];
 }
 
@@ -27,7 +27,8 @@ export function getAccessToken({ authorization }) {
  * @param {string} token
  */
 export function verifyAccessToken(token) {
-  return verify(token, accessTokenSecret);
+  // Verifies access token with the same secret key
+  return verify(token, tokenConfig.accessTokenSecret);
 }
 
 /**
@@ -35,7 +36,8 @@ export function verifyAccessToken(token) {
  * @param {string | object} payload
  */
 export function generateRefreshToken(payload) {
-  return sign(payload, refreshTokenSecret);
+  // Generate refresh token with defined secret key
+  return sign(payload, tokenConfig.refreshTokenSecret);
 }
 
 /**
@@ -43,7 +45,8 @@ export function generateRefreshToken(payload) {
  * @param {string} token
  */
 export function verifyRefreshToken(token) {
-  return verify(token, refreshTokenSecret);
+  // Verifies refresh token with the same secret key
+  return verify(token, tokenConfig.refreshTokenSecret);
 }
 
 export default {

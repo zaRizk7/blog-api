@@ -2,14 +2,19 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import route from '#core/route';
-import { environment } from '#core/config';
+import { environment } from '#config/server';
 
-const app = express(); // Initialize express application
-
-if (environment === 'development') app.use(morgan('dev')); // Logger when running in development environment
-app.use(cors()); // Allow Cross Origin Resource Sharing to allow fetching and request data
-app.use(express.urlencoded({ extended: true })); // Enable xxx-form-encoded parsing
-app.use(express.json()); // Enable JSON parsing
-app.use('/api/v1', route); // Load all API routes
+// Initialize express application
+const app = express();
+// Logger when running in development environment
+if (environment === 'development') app.use(morgan('dev'));
+// Allow Cross Origin Resource Sharing for fetching and request data
+app.use(cors());
+// Enable xxx-form-urlencoded parsing
+app.use(express.urlencoded({ extended: true }));
+// Enable JSON parsing
+app.use(express.json());
+// Load all API routes
+app.use('/api/v1', route);
 
 export default app;

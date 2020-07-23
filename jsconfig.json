@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "#config/*": ["src/config/*"],
       "#core/*": ["src/core/*"],
       "#helper/*": ["src/helper/*"],
       "#routes/*": ["src/routes/*"],

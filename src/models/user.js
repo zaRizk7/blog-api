@@ -52,8 +52,10 @@ export default class User extends Model {
    * @param {string} password plain text password that will be hashed
    */
   async hashPassword(password) {
-    if (password.length >= 8 && password.length <= 20) return hash(password); // Returns the password hash if the password is valid
-    throw new Error('Password length is not between 8-20 characters!'); // Returns error if the password is not valid
+    // Returns the password hash if the password is valid
+    if (password.length >= 8 && password.length <= 20) return hash(password);
+    // Returns error if the password is not valid
+    throw new Error('Password length is not between 8-20 characters!');
   }
 
   /**
@@ -62,7 +64,8 @@ export default class User extends Model {
    * @param {string} hash hash that will be compared
    */
   async comparePassword(password, hash) {
-    return verify(hash, password); // Returns true if the password is correct
+    // Returns true if the password is correct
+    return verify(hash, password);
   }
 
   /**
@@ -71,12 +74,15 @@ export default class User extends Model {
    * @param {object} data
    */
   async create(data) {
-    data.password = await this.hashPassword(data.password); // Hash the password if valid
-    return super.create(data); // Create and store the data into database
+    // Hash the password if valid
+    data.password = await this.hashPassword(data.password);
+    // Create and store the data into database
+    return super.create(data);
   }
 
   readByEmail(email) {
-    return this.db.findOne({ email }); // Find user based on unique email address
+    // Find user based on unique email address
+    return this.db.findOne({ email });
   }
 
   /**
@@ -86,7 +92,9 @@ export default class User extends Model {
    * @param {object} data
    */
   async update(id, data) {
-    if (data.password) data.password = await this.hashPassword(data.password); // Returns the password hash if the password is valid
-    return super.update(id, data); // Updates the data changes into database
+    // Returns the password hash if the password is valid if password are going to be updated
+    if (data.password) data.password = await this.hashPassword(data.password);
+    // Updates the data changes into database
+    return super.update(id, data);
   }
 }
